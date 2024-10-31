@@ -89,8 +89,6 @@ class Parser:
                     if self.atualToken.value != ")":
                         raise Exception("Esperado ')' após os argumentos")
                     return Function(nomeDaVariavel, args, self.functionTable[nomeDaVariavel][0], self.functionTable[nomeDaVariavel][1])
-                #print(self.atualToken.value, self.atualToken.type, "A")
-                #print(self.functionTable)
                 return variavel
         #------------------------- Se for uma expressão entre parênteses --------------------------------#
         if (self.atualToken.type == "OPEN"):
@@ -113,6 +111,18 @@ class Parser:
                 return resultado
             else:
                 raise Exception("Esperado '(' após 'scanf'")
+        
+        if self.atualToken.type in ["RAIZ"]:
+            senoCosseno = self.atualToken.value
+            self.atualToken = self.tokenizer.selectNext()
+            if self.atualToken.type != "OPEN":
+                raise Exception("Esperado '(' após seno ou cosseno")
+            self.atualToken = self.tokenizer.selectNext()
+            proxValor = self.parseExpression()
+            if self.atualToken.type != "CLOSE":
+                raise Exception("Esperado ')' após a expressão")
+            resultado = SquareOp(proxValor)
+            return resultado
         return resultado
 
     def parserDotConcats(self):
@@ -131,11 +141,15 @@ class Parser:
     def parserTerm(self):
         resultado = self.parserDotConcats()
         if (self.atualToken.type != "EOF"):
-            while self.atualToken.type in ["MULT", "DIV"]:
+            while self.atualToken.type in ["MULT", "DIV", "POW"]:
                 if self.atualToken.value == "*":
                     self.atualToken = self.tokenizer.selectNext()
                     result = self.parserFactor()
                     resultado = BinOp([resultado, result], "*")
+                elif self.atualToken.value == "@":
+                    self.atualToken = self.tokenizer.selectNext()
+                    result = self.parserFactor()
+                    resultado = BinOp([resultado, result], "@")
                 else:
                     self.atualToken = self.tokenizer.selectNext()
                     result = self.parserFactor()
@@ -218,13 +232,15 @@ class Parser:
             while self.atualToken.type == "LINE":
                 self.atualToken = self.tokenizer.selectNext()
             return resultado
+        #print(self.atualToken.value, self.atualToken.type)
         if self.atualToken.type == "IDENTIFIER":
             
             var_name = self.atualToken.value
             if self.atualFunction == "principal":
                 self.declaredVariables.add(self.atualToken.value)
-            #print(self.atualToken.value, self.atualToken.type)
+            
             self.atualToken = self.tokenizer.selectNext()
+            #print(self.atualToken.value, self.atualToken.type)
             if self.atualToken.value == "=":
                 self.atualToken = self.tokenizer.selectNext()
                 resultado = self.parseOrExpression()   
@@ -251,7 +267,7 @@ class Parser:
                 #print(resultado.name)
                 if type(resultado) == Identifier and resultado.name not in self.declaredVariables and self.atualFunction == "principal":
                     raise Exception(f"Variável não declarada: {resultado.name}")
-                #print(self.atualToken.value, self.atualToken.type)
+                
                 if self.atualToken.type != "CLOSE":
                     raise Exception("Esperado ')' após a expressão")
                 self.atualToken = self.tokenizer.selectNext()
@@ -463,6 +479,7 @@ class Parser:
                 raise Exception("Esperado ']' após a expressão")
             self.atualToken = self.tokenizer.selectNext()
             return caseOp(valor1, case1, valor2, case2, block)
+        
         return self.parseBlock()
     
     def parseBlock(self):

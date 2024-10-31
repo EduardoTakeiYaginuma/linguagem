@@ -1,3 +1,5 @@
+
+from math import sqrt
 def isNumber(s):
     try:
         for i in s:
@@ -86,6 +88,8 @@ class Identifier(Node):
             return int(resultado)
         if isString(str(resultado)):
             return str(resultado)
+        if type(resultado) == float:
+            return resultado
         return symbolTable[self.name][1].evaluate(symbolTable)
     
 class SeOp(Node):
@@ -195,6 +199,8 @@ class BinOp(Node):
             return self.children[0].evaluate(symbolTable) * self.children[1].evaluate(symbolTable)
         if self.value == "/":
             return self.children[0].evaluate(symbolTable) / self.children[1].evaluate(symbolTable)
+        if self.value == "@":
+            return self.children[0].evaluate(symbolTable) ** self.children[1].evaluate(symbolTable)
         if self.value == "maior":
             if (type(self.children[0].evaluate(symbolTable)) == type(self.children[1].evaluate(symbolTable))):
                 return returnTrueFalse(self.children[0].evaluate(symbolTable) > self.children[1].evaluate(symbolTable))
@@ -222,6 +228,12 @@ class BinOp(Node):
                 if palavra2[i] != '"':
                     stringRetorno += palavra2[i]
             return stringRetorno
+
+class SquareOp(Node):
+    def __init__(self, children):
+        self.children = children
+    def evaluate(self, symbolTable):
+        return int(sqrt(self.children.evaluate(symbolTable)) )
 
 class UnOp(Node):
     def __init__(self, children, val):

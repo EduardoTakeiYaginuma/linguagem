@@ -15,7 +15,7 @@ inteiro calculaMedia(inteiro x, inteiro y) [
 void mostraResultados(inteiro a, inteiro b) [
     inteiro soma|
     inteiro media|
-    
+    #Comentário
     soma = calculaSoma(a, b)|      /* Chama a função calculaSoma */
     media = calculaMedia(a, b)|    /* Chama a função calculaMedia */
 
@@ -30,7 +30,10 @@ void principal() [
 
     num1 = 12|
     num2 = 8|
-
+    # Comentário
+    
     /* Chama a função para mostrar os resultados */
     mostraResultados(num1, num2)|
+    num1 = raiz(25)|
+    mostre(num1)|
 ]

@@ -32,6 +32,7 @@ inteiro soma|
 inteiro subtracao|
 inteiro multiplicacao|
 inteiro divisao|
+inteiro potencia|
 inteiro resultado|
 
 /* Atribuição de valores */
@@ -43,6 +44,8 @@ soma = a + b|         /* Resultado: 15 (10 + 5) */
 subtracao = a - b|    /* Resultado: 5 (10 - 5) */
 multiplicacao = a * b| /* Resultado: 50 (10 * 5) */
 divisao = a / b|      /* Resultado: 2 (10 / 5) */
+potencia = a@b|        /* Resultado a**b */
+raiz = raiz(a)          /* Aproximação inteira de raiz de a */
 
 /* Outras Operações */ 
 resultado = (a == b)  /* Retorna 1 se são iguais, senão retorna 0 */
@@ -130,6 +133,7 @@ block         = "{" {command} "}" ;
 
 ## Modificações
 Durante as aulas da matéria de Linguagens e Paradigmas desenvolvemos um compilador para intepretar códigos em C. Para desenvolver esse compilador, utilizei as mesmas ideias de AST e uma EBNF similar. No entanto, as seguintes modificações foram feitas:
+
 1. Tokenizer e Parser: Tradução de variáveis como if else, while, main para o português a fim de facilitar a compreensão de novos programadores
 2. Tokenizer e Parser: Antes os "blocks" eram limitados por "{ }" e agora são delimitados por "[ ]"
 3. Tokenizer e Parser: Todas as linhas de código deveriam finalizar com ";" e nessa linguagem devem terminar com "|"
@@ -137,8 +141,9 @@ Durante as aulas da matéria de Linguagens e Paradigmas desenvolvemos um compila
 5. Nodes, Tokenizer e Parser: Como essa linguagem foi baseada num mix da estrutura de C e Python, algumas funcionalidades como o "paraCada" ("for" em python/C) foram implementadas usando uma estrutura intermediária entre python e C
 6. Nodes, Tokenizer e Parser: Esta linugagem possui outras funcionalidades como por a "CasoOp" 
 7. Tokenizer: Outra funcionalidade é a capacidade de interpretar valores binário (0b) e valores (0b)
-8. 
-
+8. Pré-Processamento: Este compilador remove também comentários colocados depois de #
+9. Nodes, Tokenizer, Parser: Operação de potênciação
+10. Nodes, Tokenizer, Parser: Operação de raiz
 
 ## 🧪 Testes
 Na pasta testes, disponibilizamos diversos arquivos de exemplo para demonstrar as funcionalidades do IntroductionScript:

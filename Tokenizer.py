@@ -34,7 +34,7 @@ class Tokenizer:
             return self._handle_identifier()
         elif current_char.isdigit() or (self.source[self.position:self.position + 2] in ["0b", "0x"]):
             return self._handle_number()
-        elif current_char in "+-*/()[]|=!&|.":
+        elif current_char in "+-*/()[]|=!&|.@":
             return self._handle_operator()
         else:
             self.position += 1
@@ -84,7 +84,8 @@ class Tokenizer:
             "umAte": "UMATE",
             "equivale": "EQUIVALE",
             "maior": "GREATER",
-            "menor": "LESS"
+            "menor": "LESS",
+            "raiz": "RAIZ",
         }
 
         token_type = keywords.get(value, "IDENTIFIER")
@@ -134,6 +135,7 @@ class Tokenizer:
             '-': ("MIN", "-"),
             '*': ("MULT", "*"),
             '/': ("DIV", "/"),
+            '@': ("POW", "@"),
             '(': ("OPEN", "("),
             ')': ("CLOSE", ")"),
             '[': ("OPEN_BLOCK", "["),
