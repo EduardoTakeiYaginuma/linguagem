@@ -146,7 +146,7 @@ class ParaCadaOp(Node):
         for i in range(self.value.evaluate(symbolTable)):
             symbolTable[self.var_name] = ("INT_TYPE", i)
             self.block.evaluate(symbolTable)
-        
+
 
 class BlockCommands(Node):
     def __init__(self, children):

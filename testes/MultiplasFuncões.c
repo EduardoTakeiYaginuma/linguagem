@@ -1,3 +1,4 @@
+
 /* Função para calcular a soma de dois números inteiros */
 inteiro calculaSoma(inteiro x, inteiro y) [
     retorne x + y|

@@ -182,7 +182,7 @@ class Parser:
         resultado = self.parseRelExpression()
         #print(self.atualToken.value, self.atualToken.type, "aaa")
         if self.atualToken.type != "EOF":
-            while self.atualToken.type == "equivale":
+            while self.atualToken.type == "EQUIVALE":
                 self.atualToken = self.tokenizer.selectNext()
                 proxValor = self.parseRelExpression()
                 resultado = BinOp([resultado, proxValor], "equivale")
@@ -465,13 +465,12 @@ class Parser:
             return caseOp(valor1, case1, valor2, case2, block)
         return self.parseBlock()
     
-
-    
     def parseBlock(self):
         blockCommandsList = []
         if self.atualToken.type == "EOF":
             return "EOF"
         tipoFuncao = ""
+
         if self.atualToken.type in ["INT_TYPE", "VOID_TYPE"]:
             tipoFuncao = self.atualToken.value
             self.atualToken = self.tokenizer.selectNext() # Nome da função

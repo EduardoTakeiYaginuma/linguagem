@@ -1,20 +1,21 @@
+
 # IntroductionScript 📜
 
-Uma linguagem de programação simplificada, desenvolvida em português para brasileiros que estão iniciando no mundo da programação, com uma sintaxe inspirada nas linguagens C e Python.
+IntroductionScript é uma linguagem de programação simplificada, desenvolvida em português, voltada para brasileiros que estão começando no mundo da programação. Sua sintaxe é inspirada nas linguagens C e Python, tornando-a acessível e intuitiva.
 
 ## 🎯 Motivação
 
-O IntroductionScript foi criado para tornar a programação mais acessível e intuitiva para iniciantes. Ele oferece:
+O IntroductionScript foi criado para facilitar a entrada no universo da programação, proporcionando uma experiência de aprendizado mais natural para iniciantes. Entre os principais objetivos, destacam-se:
 
-- Palavras-chave em português, facilitando a compreensão
-- Operadores matemáticos familiares (+ para soma, - para subtração, * para multiplicação, / para divisão)
-- Uma experiência de aprendizado mais natural para brasileiros dando os primeiros passos no desenvolvimento de software
+- Palavras-chave em português, que facilitam a compreensão do código.
+- Operadores matemáticos familiares: uso de símbolos comuns (+ para soma, - para subtração, * para multiplicação, / para divisão).
+- Um ambiente que promove a familiarização com conceitos fundamentais de programação.
 
 ## ✨ Características Únicas
 
 ### Sintaxe em Português
-- Palavras-chave e operadores em português: o código se torna mais intuitivo para falantes de português.
-- Estruturas de controle e declaração de variáveis que simplificam a lógica e aumentam a clareza do código.
+- Utiliza palavras-chave e operadores em português, tornando o código mais intuitivo para falantes nativos.
+- Estruturas de controle e declaração de variáveis que simplificam a lógica e aumentam a clareza.
 
 ### Sistema de Tipos Simplificado
 - `inteiro`: tipo de dados para representar números inteiros.
@@ -23,13 +24,12 @@ O IntroductionScript foi criado para tornar a programação mais acessível e in
 ## 💻 Exemplos de Código
 
 ### Operações Matemáticas
-
 ```
 /* Inicialização de Variáveis */
 inteiro a|
 inteiro b|
 inteiro soma|
-inteiro subtracao;
+inteiro subtracao|
 inteiro multiplicacao|
 inteiro divisao|
 inteiro resultado|
@@ -39,32 +39,31 @@ a = 10|
 b = 5|
 
 /* Operações Básicas */
-soma = a + b|       /* Resultado: 15 (10 + 5) */
-subtracao = a - b|   /* Resultado: 5 (10 - 5) */
-multiplicacao = a * b /* Resultado: 50 (10 * 5) */
-divisao = a / b    /* Resultado: 2 (10 / 5) */
+soma = a + b|         /* Resultado: 15 (10 + 5) */
+subtracao = a - b|    /* Resultado: 5 (10 - 5) */
+multiplicacao = a * b| /* Resultado: 50 (10 * 5) */
+divisao = a / b|      /* Resultado: 2 (10 / 5) */
 
 /* Outras Operações */ 
-resultado = (a == b) /* Se são iguais retorna 1, senão retorna 0 */
-resultado = (a maior b) /* Se a maior que b retorna 1, senão retorna 0 */
-resultado = (a menor b) /* Se a menor que b retorna 1, senão retorna 0 */
-resultado = (a && b) /* Operação AND */
-resultado = (a || b) /* Operação OR */
+resultado = (a == b)  /* Retorna 1 se são iguais, senão retorna 0 */
+resultado = (a maior b) /* Retorna 1 se a > b, senão retorna 0 */
+resultado = (a menor b) /* Retorna 1 se a < b, senão retorna 0 */
+resultado = (a && b)    /* Operação AND */
+resultado = (a || b)    /* Operação OR */
 ```
 
 ### Estruturas de Controle
-
 ```
 /* Condicional */
 se x maior 5 [
-    mostre (x)|
+    mostre(x)|
 ] senao [
-    mostre (y)|
+    mostre(y)|
 ]
 
 /* Loop */
 enquanto (x < 10) [
-    mostre (i)|
+    mostre(i)|
     i = i + 1|
 ]
 
@@ -79,10 +78,7 @@ caso (x-10+10==y) (1) (y==20) (1) [
 ]
 ```
 
-## Funções e Escopo de Variáveis
-
-Funções são blocos de código que realizam tarefas específicas. Em IntroductionScript, uma função pode ser declarada utilizando o tipo de retorno seguido do nome da função e dos parâmetros entre parênteses. Cada função possui seu próprio escopo de variáveis, ou seja, variáveis declaradas dentro de uma função são locais a ela e não podem ser acessadas de fora.
-
+### Funções e Escopo de Variáveis
 ```
 inteiro calculaSoma(inteiro x, inteiro y) [
     retorne x + y
@@ -93,41 +89,86 @@ inteiro resultado|
 resultado = calculaSoma(10, 5)|  /* Resultado: 15 */
 ```
 
-### Tipos de Funções
+#### Tipos de Funções
+- **Funções com Retorno**: Devolvem um valor ao final de sua execução utilizando a palavra-chave `retorne`.
+- **Funções Sem Retorno (void)**: Não devolvem valor, usadas para realizar tarefas específicas.
 
-#### Funções com Retorno
-- Essas funções devolvem um valor ao final de sua execução utilizando a palavra-chave `retorne`.
-- Exemplo: `inteiro calculaSoma(inteiro x, inteiro y) [...]` retorna a soma dos parâmetros x e y.
-
-#### Funções Sem Retorno (void)
-- Essas funções não devolvem valor algum.
-- Podem ser usadas para realizar tarefas específicas, como exibir mensagens.
-
-### Escopo de Variáveis em Funções
-
-As variáveis declaradas dentro de uma função são locais a ela. Elas deixam de existir quando a função termina, evitando interferência entre variáveis locais e globais de mesmo nome. As variáveis que precisam ser usadas em várias funções devem ser declaradas fora delas para que estejam em escopo global.
+## EBNF
 
 ```
-inteiro valorGlobal|  /* Variável global */
+(* EBNF para a linguagem descrita na função parseCommand *)
 
-void imprimeValores() [
-    inteiro valorLocal|
-    valorLocal = 5|
-    mostre(valorGlobal)|  /* Acessa valor global */
-    mostre(valorLocal)|   /* Acessa valor local */
-]
+(* Definições de tipos *)
+program       = {command} ;
+command       = assignment | print | if_statement | while_statement | scan | declaration | return | for_statement | case_statement ;
+assignment    = identifier "=" expression "|" ;
+print         = "mostre" "(" expression ")" "|" ;
+if_statement   = "se" "(" expression ")" block [ "senao" block ] ;
+while_statement = "enquanto" "(" expression ")" block ;
+scan          = "scanf" "(" identifier ")" "|" ;
+declaration   = type identifier_list "|" ;
+return        = "retorne" [ expression ] "|" ;
+for_statement = "paracada" identifier "de" "umate" "(" expression ")" "[" block "]" ;
+case_statement = "caso" "(" expression ")" "(" expression ")" "(" expression ")" "[" block "]" ;
+
+(* Tipos de dados *)
+type          = "int" | "str" | "void" ;
+identifier    = letter { letter | digit } ;
+identifier_list = identifier { "," identifier } ;
+expression    = or_expression ;
+or_expression  = and_expression { "ou" and_expression } ;
+and_expression = not_expression { "e" not_expression } ;
+not_expression = [ "não" ] atomic_expression ;
+atomic_expression = identifier | literal | "(" expression ")" ;
+
+(* Literais *)
+literal       = integer | string ;
+
+(* Definições auxiliares *)
+block         = "{" {command} "}" ;
+```
+
+## Modificações
+Durante as aulas da matéria de Linguagens e Paradigmas desenvolvemos um compilador para intepretar códigos em C. Para desenvolver esse compilador, utilizei as mesmas ideias de AST e uma EBNF similar. No entanto, as seguintes modificações foram feitas:
+1. Tokenizer e Parser: Tradução de variáveis como if else, while, main para o português a fim de facilitar a compreensão de novos programadores
+2. Tokenizer e Parser: Antes os "blocks" eram limitados por "{ }" e agora são delimitados por "[ ]"
+3. Tokenizer e Parser: Todas as linhas de código deveriam finalizar com ";" e nessa linguagem devem terminar com "|"
+4. Nodes, Tokenizer e Parser: Nessa linguagem, operações como > e <, são escritas como maior e menor. 
+5. Nodes, Tokenizer e Parser: Como essa linguagem foi baseada num mix da estrutura de C e Python, algumas funcionalidades como o "paraCada" ("for" em python/C) foram implementadas usando uma estrutura intermediária entre python e C
+6. Nodes, Tokenizer e Parser: Esta linugagem possui outras funcionalidades como por a "CasoOp" 
+7. Tokenizer: Outra funcionalidade é a capacidade de interpretar valores binário (0b) e valores (0b)
+8. 
+
+
+## 🧪 Testes
+Na pasta testes, disponibilizamos diversos arquivos de exemplo para demonstrar as funcionalidades do IntroductionScript:
+
+- Caso.c: Demonstração da estrutura de controle caso (similar a um switch)
+- Definição_e_Atribuição.c: Exemplos de definição e atribuição de variáveis
+- Enquanto.c: Ilustração do loop enquanto
+- MultiplasFuncoes.c: Exemplo de programa com múltiplas funções
+- Operações.c: Demonstração de operações matemáticas e lógicas
+- ParaCada.c: Exemplo do laço de repetição paraCada
+- Se_senão.c: Demonstração das estruturas condicionais se e senao
+
+### Como Executar os Testes
+Para executar qualquer um dos arquivos de teste, utilize o comando:
+```
+python main.py testes/NomeDoArquivo.c
+```
+Por exemplo:
+```
+Copypython main.py testes/Operacoes.c
 ```
 
 ## 🚀 Instalação e Execução
 
 Clone o repositório:
-
 ```bash
 git clone https://github.com/EduardoTakeiYaginuma/linguagem.git
 ```
 
-Execute um programa:
-
+Para executar um programa:
 ```bash
 python main.py arquivoTeste.c
 ```
@@ -135,8 +176,8 @@ python main.py arquivoTeste.c
 ## 👥 Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para:
-
 - Reportar bugs
 - Sugerir novas funcionalidades
 - Melhorar a documentação
 - Adicionar mais exemplos
+
