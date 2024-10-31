@@ -128,14 +128,10 @@ class Tokenizer:
             '[': ("OPEN_BLOCK", "["),
             ']': ("CLOSE_BLOCK", "]"),
             '|': ("LINE", "|"),
-
             '=': ("EQUAL", "="),
             '!': ("NOT", "!"),
             '.': ("DOT", "."),
         }
-        
-        #if operators[current_char] == (self.lastToken.type, self.lastToken.value) and (self.lastToken.type == "OPEN_BLOCK" or self.lastToken.type == "CLOSE_BLOCK"):
-            #raise Exception("Syntax error: Expected identifier")
-        
+
         self.next_token = Token(*operators.get(current_char, ("UNKNOWN", current_char)))
         return self.next_token

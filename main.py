@@ -147,17 +147,17 @@ class Parser:
         resultado = self.parserTerm()
         #print(self.atualToken.value, self.atualToken.type, "SAKOFNASOF")
         if self.atualToken.type != "EOF":
-            #breakpoint()
+
             while (self.atualToken.type in ["PLUS", "MIN"]):
                 if (self.atualToken.value == "+"):
                     self.atualToken = self.tokenizer.selectNext()
                     proxValor = self.parserTerm()
                     resultado = BinOp([resultado, proxValor], "+")
                 elif (self.atualToken.value == "-"):
-                    #breakpoint()
+        
                     self.atualToken = self.tokenizer.selectNext()
                     proxValor = self.parserTerm()
-                    #breakpoint()
+        
                     resultado = BinOp([resultado, proxValor], "-")
         return resultado
     
@@ -185,7 +185,7 @@ class Parser:
             while self.atualToken.type == "equivale":
                 self.atualToken = self.tokenizer.selectNext()
                 proxValor = self.parseRelExpression()
-                resultado = BinOp([resultado, proxValor], "==")
+                resultado = BinOp([resultado, proxValor], "equivale")
             
         return resultado
 
@@ -219,12 +219,12 @@ class Parser:
                 self.atualToken = self.tokenizer.selectNext()
             return resultado
         if self.atualToken.type == "IDENTIFIER":
+            
             var_name = self.atualToken.value
             if self.atualFunction == "principal":
                 self.declaredVariables.add(self.atualToken.value)
             #print(self.atualToken.value, self.atualToken.type)
             self.atualToken = self.tokenizer.selectNext()
-            #print(self.atualToken.value, self.atualToken.type)
             if self.atualToken.value == "=":
                 self.atualToken = self.tokenizer.selectNext()
                 resultado = self.parseOrExpression()   
@@ -389,10 +389,11 @@ class Parser:
             self.atualToken = self.tokenizer.selectNext()
             if self.atualToken.type != "IDENTIFIER":
                 raise Exception("Esperado identificador após 'for'")
+            self.declaredVariables.add(self.atualToken.value)
             var_name = self.atualToken.value
             self.atualToken = self.tokenizer.selectNext()
             if self.atualToken.value != "de":
-                raise Exception("Esperado 'in' após o identificador")
+                raise Exception("Esperado 'de' após o identificador")
             self.atualToken = self.tokenizer.selectNext()
             if self.atualToken.type != "UMATE":
                 raise Exception("Esperado 'range' após 'in'")

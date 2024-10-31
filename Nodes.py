@@ -144,6 +144,7 @@ class ParaCadaOp(Node):
     def evaluate(self, symbolTable):
 
         for i in range(self.value.evaluate(symbolTable)):
+            symbolTable[self.var_name] = ("INT_TYPE", i)
             self.block.evaluate(symbolTable)
         
 
