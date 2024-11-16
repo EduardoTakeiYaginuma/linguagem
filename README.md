@@ -53,6 +53,13 @@ resultado = (a maior b) /* Retorna 1 se a > b, senão retorna 0 */
 resultado = (a menor b) /* Retorna 1 se a < b, senão retorna 0 */
 resultado = (a && b)    /* Operação AND */
 resultado = (a || b)    /* Operação OR */
+
+lista notas|              /* Declaração de lista */
+notas~1 = 4|             /* Atribuição na posição 1 */
+notas~2 = 7|             /* Atribuição na posição 2 */
+mostre(notas~1)|         /* Acesso ao elemento na posição 1 */
+inteiro x|
+x = notas~2|             /* Atribuição do valor da lista para variável */
 ```
 
 ### Estruturas de Controle
@@ -103,8 +110,8 @@ resultado = calculaSoma(10, 5)|  /* Resultado: 15 */
 
 (* Definições de tipos *)
 program       = {command} ;
-command       = assignment | print | if_statement | while_statement | scan | declaration | return | for_statement | case_statement ;
-assignment    = identifier "=" expression "|" ;
+command       = assignment | print | if_statement | while_statement | scan | declaration | return | for_statement | case_statement | list_operation ;
+assignment    = (identifier | list_access) "=" expression "|" ;
 print         = "mostre" "(" expression ")" "|" ;
 if_statement   = "se" "(" expression ")" block [ "senao" block ] ;
 while_statement = "enquanto" "(" expression ")" block ;
@@ -113,9 +120,13 @@ declaration   = type identifier_list "|" ;
 return        = "retorne" [ expression ] "|" ;
 for_statement = "paracada" identifier "de" "umate" "(" expression ")" "[" block "]" ;
 case_statement = "caso" "(" expression ")" "(" expression ")" "(" expression ")" "[" block "]" ;
+list_operation = list_access ;
+list_access    = identifier "~" expression ;
+list_declaration = "lista" identifier "~" integer "|" ;
+
 
 (* Tipos de dados *)
-type          = "int" | "str" | "void" ;
+type          = "int" | "str" | "void" | "lista" ;
 identifier    = letter { letter | digit } ;
 identifier_list = identifier { "," identifier } ;
 expression    = or_expression ;

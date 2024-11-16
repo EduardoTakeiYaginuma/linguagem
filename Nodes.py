@@ -77,19 +77,25 @@ class AssingTwoOp(Node):
         
 
 class Identifier(Node):
-    def __init__(self, name):
+    def __init__(self, name, index = 0):
         self.name = name
+        self.index = index
     def evaluate(self, symbolTable):
         try:
             resultado = symbolTable[self.name][1]
         except KeyError:
             raise ValueError("Variável não declarada")
         if isNumber(str(resultado)):
+            # print(symbolTable[self.name])
             return int(resultado)
         if isString(str(resultado)):
             return str(resultado)
         if type(resultado) == float:
             return resultado
+        if type(resultado) == list:
+            # print("das", resultado[self.index].evaluate(symbolTable))
+            return resultado[self.index].evaluate(symbolTable)
+        # print("aa")
         return symbolTable[self.name][1].evaluate(symbolTable)
     
 class SeOp(Node):
@@ -129,7 +135,8 @@ class EnquantoOp(Node):
             count += 1
         if count == max_iterations:
             raise ValueError("Limite de iterações atingido")
-            
+
+
 class AssignOp(Node):
     def __init__(self, var_name, value):
         self.nomeVariavel = var_name
@@ -192,6 +199,7 @@ class BinOp(Node):
         self.value = eval
     def evaluate(self, symbolTable):
         if self.value == "+":
+            # print(self.children[0].evaluate(symbolTable), self.children[0])
             return self.children[0].evaluate(symbolTable) + self.children[1].evaluate(symbolTable)
         if self.value == "-":
             return self.children[0].evaluate(symbolTable) - self.children[1].evaluate(symbolTable)
@@ -246,6 +254,12 @@ class UnOp(Node):
             return not self.child.evaluate(symbolTable)
         else:
             return self.child.evaluate(symbolTable)
+        
+class ValOp(Node):
+    def __init__(self, val):
+        self.value = val
+    def evaluate(self, symbolTable):
+        return self.value
 
 class IntVal(Node):
     def __init__(self, val):

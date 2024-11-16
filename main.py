@@ -5,11 +5,16 @@ from Verificacao import Verificacao
 from Tokenizer import Token
 from Nodes import *
 import os
+import copy
 
 def verificaSybolTable(symbolTable):
     for variavel in symbolTable:
         valorVariavel = (symbolTable[variavel][1])
         #print(valorVariavel)
+
+        if isinstance(valorVariavel, list):
+            continue
+
         if str(valorVariavel) not in "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ":
             valorVariavel = valorVariavel.evaluate(symbolTable)
         tipoVariavel = symbolTable[variavel][0]
@@ -33,6 +38,7 @@ class Parser:
         self.functionTable = {}  # Adicionado: tabela de funções
         self.temReturn = False
         self.atualFunction = ""
+
     def parserFactor(self):
         resultado = None
         #print(self.atualToken.value, self.atualToken.type, "B")
@@ -89,6 +95,19 @@ class Parser:
                     if self.atualToken.value != ")":
                         raise Exception("Esperado ')' após os argumentos")
                     return Function(nomeDaVariavel, args, self.functionTable[nomeDaVariavel][0], self.functionTable[nomeDaVariavel][1])
+                elif nomeDaVariavel in self.symbolTable and self.symbolTable[nomeDaVariavel][0] == "LIST_TYPE":
+                    self.atualToken = self.tokenizer.selectNext()
+
+                    if (self.atualToken.type != "LIST_INDEX"):
+                        # print(self.atualToken.__dict__, "AA")
+                        raise Exception("Esperado '~indice' após o identificador do tipo lista")
+                    
+                    index = self.atualToken.value
+
+                    if (index > len(self.symbolTable[nomeDaVariavel][1])):
+                        raise Exception("Índice fora do alcance da lista")
+
+                    return Identifier(nomeDaVariavel, index)
                 return variavel
         #------------------------- Se for uma expressão entre parênteses --------------------------------#
         if (self.atualToken.type == "OPEN"):
@@ -233,6 +252,7 @@ class Parser:
                 self.atualToken = self.tokenizer.selectNext()
             return resultado
         #print(self.atualToken.value, self.atualToken.type)
+
         if self.atualToken.type == "IDENTIFIER":
             
             var_name = self.atualToken.value
@@ -241,6 +261,7 @@ class Parser:
             
             self.atualToken = self.tokenizer.selectNext()
             #print(self.atualToken.value, self.atualToken.type)
+
             if self.atualToken.value == "=":
                 self.atualToken = self.tokenizer.selectNext()
                 resultado = self.parseOrExpression()   
@@ -253,7 +274,36 @@ class Parser:
                 while self.atualToken.type == "LINE":
                     self.atualToken = self.tokenizer.selectNext()
                 return AssignOp(var_name, resultado)  # Alterado: usa self.symbolTable
+            elif self.atualToken.type == "LIST_INDEX":
+                list_index = self.atualToken.value
+                self.atualToken = self.tokenizer.selectNext()
+
+                if list_index >= len(self.symbolTable[var_name][1]):    
+                    raise Exception("Índice fora do alcance da lista")
+
+                if self.atualToken.value == "=":
+                    self.atualToken = self.tokenizer.selectNext()
+                    resultado = self.parseOrExpression()   
+                
+                    new_list = copy.deepcopy(self.symbolTable[var_name][1])
+                    new_list[list_index] = resultado
+                    self.symbolTable[var_name] = (self.symbolTable[var_name][0], new_list)
+
+                    # print(self.atualToken.__dict__, "POST")
+
+                    if self.atualToken.type != "LINE":
+                        raise Exception("Esperado '|' após a expressão")
+                    
+                    while self.atualToken.type == "LINE":
+                        self.atualToken = self.tokenizer.selectNext()
+
+                    return AssignOp(var_name, ValOp(new_list))  # Alterado: usa self.symbolTable
+                else: 
+                    # print(self.atualToken.__dict__, "<<<<<")
+                    
+                    raise Exception("Esperado '=' após o identificador ao modificar um índice de lista")
             else:
+                # print(self.atualToken.__dict__)
                 raise Exception("Esperado '=' após o identificador")
             
         elif self.atualToken.type == "MOSTRE":
@@ -387,7 +437,31 @@ class Parser:
                 return AssingTwoOp(identifiers, IntVal(123321))
             else:
                 raise Exception("Esperado identificador após o tipo")
-            
+        elif self.atualToken.type == "LIST_TYPE":
+            tipo = self.atualToken.type
+            self.atualToken = self.tokenizer.selectNext()
+            if self.atualToken.type == "IDENTIFIER":
+                var_name = self.atualToken.value
+                if self.atualFunction == "principal":
+                    self.declaredVariables.add(self.atualToken.value)
+                self.atualToken = self.tokenizer.selectNext()
+
+                if self.atualToken.type != "LIST_INDEX":
+                    raise Exception("Esperado '~indice' após o identificador do tipo lista")
+                
+                list_len = self.atualToken.value
+                self.symbolTable[var_name] = (tipo, [ValOp(None) for _ in range(int(list_len))])
+
+                self.atualToken = self.tokenizer.selectNext()
+                if self.atualToken.type != "LINE":
+                    raise Exception("Esperado '|' após a expressão")
+                while self.atualToken.type == "LINE":
+                    self.atualToken = self.tokenizer.selectNext()
+
+                # print(self.symbolTable)
+                return AssignOp(var_name, ValOp([ValOp(None) for _ in range(int(list_len))]))
+            else:
+                raise Exception("Esperado identificador após o tipo")
         elif self.atualToken.type == "RETORNE":
             self.temReturn = True
             self.atualToken = self.tokenizer.selectNext()

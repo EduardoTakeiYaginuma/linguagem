@@ -34,7 +34,7 @@ class Tokenizer:
             return self._handle_identifier()
         elif current_char.isdigit() or (self.source[self.position:self.position + 2] in ["0b", "0x"]):
             return self._handle_number()
-        elif current_char in "+-*/()[]|=!&|.@":
+        elif current_char in "+-*/()[]|=!&|.@~":
             return self._handle_operator()
         else:
             self.position += 1
@@ -76,6 +76,7 @@ class Tokenizer:
             "mostre": "MOSTRE",
             "inteiro": "INT_TYPE",
             "string": "STR_TYPE",
+            "lista": "LIST_TYPE",
             "void": "VOID_TYPE",
             "retorne": "RETORNE",
             "paraCada": "PARACADA",
@@ -88,8 +89,11 @@ class Tokenizer:
             "raiz": "RAIZ",
         }
 
+
         token_type = keywords.get(value, "IDENTIFIER")
         self.next_token = Token(token_type, value)
+        # print(self.next_token.__dict__)
+        
         return self.next_token
 
     def _handle_number(self):
@@ -128,6 +132,16 @@ class Tokenizer:
         elif current_char == '|' and self.position < len(self.source) and self.source[self.position] == '|':
             self.position += 1
             self.next_token = Token("OR", "||")
+            return self.next_token
+        elif current_char == '~':
+            index = ""
+
+            while self.position < len(self.source) and self.source[self.position].isdigit():
+                index += self.source[self.position]
+                self.position += 1
+
+            self.next_token = Token("LIST_INDEX", int(index))
+
             return self.next_token
         
         operators = {
